@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein KI-Assistent</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { width: 400px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
+        #chat-box { height: 400px; padding: 20px; overflow-y: auto; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; }
+        .user { align-self: flex-end; background: #007bff; color: white; }
+        .ai { align-self: flex-start; background: #e9ecef; color: #333; }
+        .input-area { display: flex; padding: 15px; gap: 10px; background: #fff; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+        button { border: none; background: #007bff; color: white; padding: 10px 15px; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0056b3; }
+        .mic-active { background: #dc3545 !important; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div id="chat-box">
+        <div class="message ai">Hallo! Wie kann ich dir heute helfen? Tippe etwas oder nutze das Mikrofon.</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Nachricht schreiben...">
+        <button id="mic-btn" title="Spracheingabe">🎤</button>
+        <button id="send-btn">➤</button>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const micBtn = document.getElementById('mic-btn');
+
+    // 1. Sprachausgabe (KI spricht)
+    function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'de-DE';
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // 2. Chat-Verlauf aktualisieren
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        msgDiv.innerText = text;
